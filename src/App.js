@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import MainHeader from "./components/MainHeader/MainHeader";
+import AuthContext from "./context/auth-context";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     const loggedInInfo = localStorage.getItem("isLoggedIn");
-    console.log('logged')
+    console.log("logged");
     if (loggedInInfo === "1") {
       setIsLoggedIn(true);
     }
-  }, [])
+  }, []);
 
   const loginHandler = (email, password) => {
     // We should check email and password
@@ -27,13 +28,13 @@ function App() {
   };
 
   return (
-    <React.Fragment>
+    <AuthContext.Provider value={{isLoggedIn: isLoggedIn}}>
       <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
       </main>
-    </React.Fragment>
+    </AuthContext.Provider>
   );
 }
 
